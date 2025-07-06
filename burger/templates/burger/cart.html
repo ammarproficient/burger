@@ -1,0 +1,51 @@
+{% extends "burger/base.html" %}
+{% block title %}Your Cart{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <h2 class="text-center mb-4 fw-bold">🛒 Your Cart</h2>
+
+    {% if cart_items %}
+    <div class="table-responsive">
+        <table class="table table-bordered align-middle text-center shadow-sm">
+            <thead class="table-light">
+                <tr>
+                    <th>Burger</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Item Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in cart_items %}
+                <tr>
+                    <td class="fw-semibold">{{ item.burger.name }}</td>
+
+                    <td class="text-success fw-bold">${{ item.burger.price }}</td>
+                    <td>
+                        <div class="d-flex justify-content-center align-items-center gap-2">
+                            <a href="{% url 'decrease_quantity' item.burger.pk %}" class="btn btn-sm btn-outline-danger  px-2 py-0">−</a>
+                            <span class="fs-5">{{ item.quantity }}</span>
+                            <a href="{% url 'increase_quantity' item.burger.pk %}" class="btn btn-sm btn-outline-success  px-2 py-0">+</a>
+                        </div>
+                    </td>
+                    <td class="fw-semibold">${{ item.item_total }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="text-end mt-4">
+        <h4 class="fw-bold">Total: <span class="text-success">${{ total_price }}</span></h4>
+        <a href="{% url 'checkout' %}" class="btn btn-lg btn-outline-success mt-3">
+            <i class="bi bi-credit-card"></i> Proceed to Checkout
+        </a>
+    </div>
+    {% else %}
+    <div class="alert alert-info text-center mt-4">
+        Your cart is empty. 🧺 Add some tasty burgers first!
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

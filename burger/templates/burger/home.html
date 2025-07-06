@@ -1,0 +1,40 @@
+{% extends "burger/base.html" %}
+{% block title %}Home - Burger App{% endblock %}
+{% block content %}
+
+<h2 class="text-center mb-4">🍔 Our Burgers</h2>
+
+<!-- Category Filter Buttons -->
+<div class="text-center mb-4">
+    <a href="{% url 'home' %}" class="btn btn-outline-dark me-2 {% if not selected_category %}active{% endif %}">All</a>
+    {% for cat in categories %}
+    <a href="{% url 'burger_by_category' cat.id %}"
+       class="btn btn-outline-dark me-2 {% if selected_category == cat.id %}active{% endif %}">
+        {{ cat.name }}
+    </a>
+    {% endfor %}
+</div>
+
+<!-- Burger Cards -->
+<div class="row">
+    {% for burger in burgers %}
+    <div class="col-md-4 my-3">
+        <div class="card h-100">
+            {% if burger.image %}
+            <img src="{{ burger.image.url }}" class="card-img-top" alt="{{ burger.name }}">
+            {% endif %}
+            <div class="card-body">
+                <h3 class="card-title">{{ burger.name }}</h3>
+                <p class="card-text"><strong>Price:</strong> ${{ burger.price }}</p>
+                <a href="{% url 'burger_detail' burger.pk %}" class="btn btn-outline-danger mt-2">View Details</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% if not burgers %}
+<p class="text-center">No burgers found in this category.</p>
+{% endif %}
+
+{% endblock %}

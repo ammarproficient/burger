@@ -1,0 +1,53 @@
+{% extends "burger/base.html" %}
+{% block title %}{{ burger.name }} - Details{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row align-items-center mb-5">
+        <div class="col-md-6">
+            {% if burger.image %}
+            <img src="{{ burger.image.url }}" alt="{{ burger.name }}" class="img-fluid rounded shadow-sm">
+            {% endif %}
+        </div>
+        <div class="col-md-6">
+            <h2 class="display-5 fw-bold">{{ burger.name }}</h2>
+            <p class="mb-2">
+                <span class="badge bg-warning text-dark">Category: {{ burger.category.name }}</span>
+            </p>
+            <p class="lead">{{ burger.description }}</p>
+            <p class="h5 text-success fw-semibold">Price: ${{ burger.price }}</p>
+
+            <!-- Add to Cart Form -->
+            <form method="post" action="{% url 'add_to_cart' burger.pk %}" class="mt-4 d-flex gap-2">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-success btn-md">
+                    <i class="bi bi-cart-plus"></i> Add to Cart
+                </button>
+                <a href="{% url 'cart' %}" class="btn btn-outline-danger btn-md">
+                    <i class="bi bi-basket"></i> Show Cart
+                </a>
+            </form>
+        </div>
+    </div>
+
+    <!-- Suggested Burgers -->
+    <h3 class="mb-4 text-center">🔥 Check Out Other Burgers</h3>
+    <div class="row">
+        {% for b in related_burgers %}
+        <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
+            <div class="card h-100 shadow-sm border-0">
+                {% if b.image %}
+                <img src="{{ b.image.url }}" class="card-img-top rounded-top" alt="{{ b.name }}">
+                {% endif %}
+                <div class="card-body d-flex flex-column justify-content-between">
+                    <h5 class="card-title text-center fw-bold">{{ b.name }}</h5>
+                    <p class="text-center text-muted">${{ b.price }}</p>
+                    <a href="{% url 'burger_detail' b.pk %}" class="btn btn-outline-danger btn-md mt-2 w-100">View
+                        Details</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
